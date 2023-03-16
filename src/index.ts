@@ -1,19 +1,25 @@
-import express from "express";
-import helmet from "helmet";
-import cors from "cors"
-
-const app = express()
-app.use(express.json())
-app.use(helmet())
-app.use(cors())
+import "reflect-metadata"
+import app from './config/app'
+import { AppDataSource } from './config/db'
 
 const PORT = 3000
+
+const main = async () => {
+    try {
+        await AppDataSource.initialize()
+        app.listen(PORT, () => {
+            console.log(`🚀 Server running on port ${PORT}`)
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+main()
+
 
 app.get('/ping', (_req, res) => {
     console.log('someone ping here!!')
     res.send('pong!! 🏓')
 })
 
-app.listen(PORT, () =>{
-    console.log(`🚀 Server running on port ${PORT}`)
-})
